@@ -93,6 +93,31 @@ class Visualizer:
         - How much better is it than others
         - Are simple models "good enough"?
         - Is complex model worth the extra computation?
+        """
+        plt.figure(figsize=(12, 6))
+        
+        models = list(results_dict.keys())
+        values = [results_dict[model][metric] for model in models]
+        
+        bars = plt.barh(models, values, color='steelblue')
+        
+        # Add value labels on bars
+        for i, bar in enumerate(bars):
+            width = bar.get_width()
+            plt.text(width, bar.get_y() + bar.get_height()/2, 
+                    f'{values[i]:.4f}', 
+                    ha='left', va='center', fontsize=10, fontweight='bold')
+        
+        plt.xlabel(f'{metric.upper()}', fontsize=12, fontweight='bold')
+        plt.ylabel('Model', fontsize=12, fontweight='bold')
+        
+        if title is None:
+            title = f'Model Comparison - {metric.upper()}'
+        plt.title(title, fontsize=14, fontweight='bold')
+        
+        plt.tight_layout()
+        plt.show()
+    
     @staticmethod
     def plot_train_test_comparison(train_results, test_results, metric='rmse'):
         """
@@ -136,39 +161,6 @@ class Visualizer:
             train_results: Dictionary of train results
             test_results: Dictionary of test results
             metric: Metric to plot ('rmse' or 'mape')
-        """ metric: Metric to plot ('rmse' or 'mape')
-            title: Custom title for the chart
-        """
-        models = list(results_dict.keys())
-        values = [results_dict[model][metric] for model in models]
-        
-        fig, ax = plt.subplots(figsize=(12, 6))
-        bars = ax.bar(models, values, color='steelblue', alpha=0.7)
-        
-        # Add value labels on bars
-        for bar in bars:
-            height = bar.get_height()
-            ax.text(bar.get_x() + bar.get_width()/2., height,
-                   f'{height:.4f}',
-                   ha='center', va='bottom', fontsize=10)
-        
-        plt.xlabel('Models', fontsize=12)
-        plt.ylabel(metric.upper(), fontsize=12)
-        plt.title(title or f'Model Comparison - {metric.upper()}', fontsize=15)
-        plt.xticks(rotation=45, ha='right')
-        plt.grid(axis='y', alpha=0.3)
-        plt.tight_layout()
-        plt.show()
-    
-    @staticmethod
-    def plot_train_test_comparison(train_results, test_results, metric='rmse'):
-        """
-        Plot train vs test performance
-        
-        Args:
-            train_results: Dictionary of train results
-            test_results: Dictionary of test results
-            metric: Metric to plot
         """
         models = list(train_results.keys())
         train_values = [train_results[m][metric] for m in models]

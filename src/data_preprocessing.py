@@ -93,7 +93,14 @@ class DataPreprocessor:
         filename = filename or Config.MERGED_DATA_FILE
         
         print(f"Loading dataframe from {filename}...")
-        df = pd.read_csv(filename, sep=',', 
+        df = pd.read_csv(filename, sep=',', parse_dates=['date'], low_memory=False)
+        
+        print(f"Sorting by date...")
+        df = df.sort_values(by='date').reset_index(drop=True)
+        
+        print(f"Loaded {len(df)} ratings")
+        return df
+    
     @staticmethod
     def check_data_quality(df):
         """
@@ -119,21 +126,27 @@ class DataPreprocessor:
             
         Returns:
             dict: Quality metrics (numbers about data quality)
-        """method
-    def check_data_quality(df):
-        """
-        Check for NaN values and duplicates
-        
-        Args:
-            df: DataFrame to check
-            
-        Returns:
-            dict: Quality metrics
         """
         nan_count = sum(df.isnull().any())
         dup_count = sum(df.duplicated(['movie', 'user', 'rating']))
         
         metrics = {
+            'nan_count': nan_count,
+            'duplicates': dup_count,
+            'n_users': df['user'].nunique(),
+            'n_movies': df['movie'].nunique(),
+            'n_ratings': len(df)
+        }
+        
+        print(f"\nData Quality Check:")
+        print(f"Number of users: {metrics['n_users']}")
+        print(f"Number of movies: {metrics['n_movies']}")
+        print(f"Number of ratings: {metrics['n_ratings']}")
+        print(f"NaN values: {metrics['nan_count']}")
+        print(f"Duplicate ratings: {metrics['duplicates']}\n")
+        
+        return metrics
+    
     @staticmethod
     def split_train_test(df, train_ratio=None):
         """
@@ -164,21 +177,6 @@ class DataPreprocessor:
             
         Returns:
             tuple: (train_df, test_df) - two separate dataframes
-        """nt()
-        
-        return metrics
-    
-    @staticmethod
-    def split_train_test(df, train_ratio=None):
-        """
-        Split data into train and test sets based on time
-        
-        Args:
-            df: DataFrame to split
-            train_ratio: Ratio for train split (default from Config)
-            
-        Returns:
-            tuple: (train_df, test_df)
         """
         train_ratio = train_ratio or Config.TRAIN_SPLIT
         split_idx = int(df.shape[0] * train_ratio)
