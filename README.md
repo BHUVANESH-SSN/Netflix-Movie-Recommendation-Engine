@@ -61,13 +61,67 @@ The dataset contains:
 - Timestamps for each rating
 - User IDs and Movie IDs
 
+### Dataset Files
+
+The Netflix Prize dataset consists of 5 main files:
+
+1. **movie_titles.csv** - Contains movie information
+   - Movie ID
+   - Year of release
+   - Movie title
+
+2. **combined_data_1.txt** - Training data (Part 1)
+   - Contains movie ratings in the format:
+   - MovieID:
+   - CustomerID, Rating, Date
+
+3. **combined_data_2.txt** - Training data (Part 2)
+   - Same format as combined_data_1.txt
+   - Contains additional movie ratings
+
+4. **combined_data_3.txt** - Training data (Part 3)
+   - Same format as combined_data_1.txt
+   - Contains additional movie ratings
+
+5. **combined_data_4.txt** - Training data (Part 4)
+   - Same format as combined_data_1.txt
+   - Contains additional movie ratings
+
+**Total Dataset Size:**
+- Over 100 million ratings
+- From 480,000+ users
+- On 17,000+ movies
+- Ratings span from October 1998 to December 2005
+
+**Data Format Example:**
+```
+1:
+1488844,3,2005-09-06
+822109,5,2005-05-13
+885013,4,2005-10-19
+30878,4,2005-12-26
+...
+```
+
+The four `combined_data_*.txt` files are used for training and testing the recommendation models. These files are split into train (80%) and test (20%) sets during the preprocessing phase.
+
 ## 📁 Project Structure
 
 ```
 Netflix_Movie_Recommendation_Engine/
 │
 ├── netflix_movie_recommendation.ipynb    # Main Jupyter notebook
-└── README.md                              # Project documentation
+├── README.md                              # Project documentation
+├── .gitignore                             # Git ignore file
+│
+└── data_folder/                           # Dataset directory (not tracked in git)
+    ├── movie_titles.csv                   # Movie information
+    ├── combined_data_1.txt                # Training data part 1
+    ├── combined_data_2.txt                # Training data part 2
+    ├── combined_data_3.txt                # Training data part 3
+    ├── combined_data_4.txt                # Training data part 4
+    ├── probe.txt                          # Probe/validation set
+    └── qualifying.txt                     # Qualifying/test set
 ```
 
 ## 🔬 Machine Learning Models
